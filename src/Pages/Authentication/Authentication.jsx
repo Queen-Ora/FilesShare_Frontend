@@ -135,7 +135,7 @@ export default function Authentication() {
           <form
             onSubmit={handle_register}
             method="post"
-            enctype="multipart/form-data"
+            encType="multipart/form-data"
           >
             <h1>Inscription</h1>
             <input

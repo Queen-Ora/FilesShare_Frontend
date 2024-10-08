@@ -564,4 +564,45 @@
     border-top-left-radius: 30px;
    }
   
+   /* Dropdown style */
+
+.dropdown-menu {
+  position: absolute; /* Assurez-vous qu'il est positionné correctement */
+  z-index: 1000; /* Un z-index élevé pour qu'il soit au-dessus des autres éléments */
+  background-color: white; /* Assurez-vous que l'arrière-plan est visible */
+  border: 1px solid #ccc; /* Une bordure pour la visibilité */
+  border-radius: 4px; /* Coins arrondis */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre pour plus de profondeur */
+  padding: 10px; /* Espacement interne */
+  display: block; /* Assurez-vous que l'affichage est correct */
+}
+
+
+.dropdown-menu.show {
+  opacity: 1; /* Le menu devient visible */
+  transform: translateY(0); /* Le menu glisse en place */
+  pointer-events: auto; /* Active les événements du pointeur lorsque le menu est visible */
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s ease; /* Animation sur hover */
+}
+
+.dropdown-menu li:hover {
+  background-color: #f1f1f1;
+}
+
+.chat-box.active {
+  background-color: #e0f7fa; /* Change la couleur de fond quand un groupe est sélectionné */
+  border-left: 5px solid #00acc1; /* Ajoute une bordure pour indiquer qu'il est actif */
+  transition: background-color 0.3s ease, border-left 0.3s ease; /* Animation pour un effet fluide */
+}
+
+.hidden {
+  display: none; /* Masque les éléments */
+}
+
   

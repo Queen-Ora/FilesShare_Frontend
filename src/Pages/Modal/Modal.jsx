@@ -14,6 +14,7 @@ const Modal = ({ isOpen, onClose, user }) => {
         />
         <h2>{user.name}</h2>
         <p> {user.email}</p>
+        <button style={{ backgroundColor: 'red', color: 'white',marginRight: '10px' }}>Deconnexion</button>
         <button onClick={onClose}>Fermer</button>
       </div>
     </div>
