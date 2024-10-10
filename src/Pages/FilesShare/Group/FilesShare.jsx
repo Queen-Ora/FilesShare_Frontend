@@ -13,6 +13,9 @@ export default function Group() {
   const [groups, setGroups] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler le modal
   const [selectedGroupAvatar, setSelectedGroupAvatar] = useState(defaultAvatar); // Pour stocker l'avatar du groupe sélectionné
+  const [file, setFile] = useState(null); // État pour gérer le fichier sélectionné
+  const [files, setFiles] = useState([]); 
+  const [uploadedFileName, setUploadedFileName] = useState("");
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // État pour le dropdown
@@ -58,32 +61,53 @@ useEffect(() => {
 
 useEffect(() => {
     if (selectedGroupId) {
-      const fetchMessages = async () => {
+      const fetchFiles = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/filesshare/getMessages/${selectedGroupId}`);
-          setMessages(response.data.messages); // Met à jour les messages du groupe sélectionné
+          const response = await axios.get(`http://localhost:8000/api/filesshare/getFiles/${selectedGroupId}`);
+          // console.log(response.data.files); // Afficher les données des fichiers dans la console
+          setFiles(response.data.files);
         } catch (error) {
           console.log(error);
         }
       };
-      fetchMessages();
+      fetchFiles();
     }
   }, [selectedGroupId]); // Recharger les messages chaque fois que selectedGroupId change
 
    // Charger les discussions du groupe sélectionné
-   useEffect(() => {
-    if (selectedGroupId) {
-      const fetchMessages = async () => {
-        try {
-          const response = await axios.get(`http://localhost:8000/api/filesshare/getMessages/${selectedGroupId}`);
-          setMessages(response.data.messages); // Met à jour les messages du groupe sélectionné
-        } catch (error) {
-          console.log(error);
+  //  useEffect(() => {
+  //   if (selectedGroupId) {
+  //     const fetchMessages = async () => {
+  //       try {
+  //         const response = await axios.get(`http://localhost:8000/api/filesshare/getMessages/${selectedGroupId}`);
+  //         setMessages(response.data.messages); // Met à jour les messages du groupe sélectionné
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
+  //     fetchMessages();
+  //   }
+  // }, [selectedGroupId]); // Recharger les messages chaque fois que selectedGroupId change
+
+  const handleSendFile = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/filesshare/sendFile/${UserId}/${selectedGroupId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      };
-      fetchMessages();
+      );
+      console.log(response.data.originalName);
+      setUploadedFileName(response.data.originalName);
+    } catch (error) {
+      console.log(error);
     }
-  }, [selectedGroupId]); // Recharger les messages chaque fois que selectedGroupId change
+  }
 
   // Fonction pour ouvrir le modal
   const handleProfileClick = () => {
@@ -130,6 +154,11 @@ useEffect(() => {
     setSelectedGroupAvatar(groupAvatar ? groupAvatar : defaultAvatar); // Met à jour l'avatar du groupe sélectionné
     setSelectedGroupName(groupName); // Met à jour le nom du groupe sélectionné
 };
+
+const handleFileChange = (e) => {
+  setFile(e.target.files[0]); // Stocke le fichier sélectionné
+};
+
 
 
   return (
@@ -252,10 +281,10 @@ useEffect(() => {
                   exit="exit"
                   variants={dropdownVariants}
                 >
-                    <a href="chdhdhdh" style={{ zIndex: 1 }}>ddd</a>
-                  <li><a href="" >Nouveau Groupe</a></li>
-                  <li><a href="">Ajouter un membre</a></li>
-                  <li><a href="">Se Deconnecter</a></li>
+                    <a href="/create" style={{ zIndex: 1 }}>Nouveau Groupe</a><br /><br />
+                    <a href= {`add/${selectedGroupId}`} style={{ zIndex: 1 }}>Ajouter un membre</a><br /><br />
+                    {/* <a href="chdhdhdh" style={{ zIndex: 1 }}>Nouveau Groupe</a> */}
+                  
                 </motion.ul>
               )}
             </div>
@@ -263,7 +292,18 @@ useEffect(() => {
 
 
           <div className="chat-container">
-            {selectedGroupId ? (
+            <h1>FIchiers de ce groupe</h1>
+            {files.length > 0 ? (
+              files.map((fileData, index) => (
+                <a target="_blank" href={`http://localhost:8000/uploads/${fileData}`} key={index} className={`message-box`}>
+                  <p style={{color:"blue",fontWeight:"bold"}}>{fileData}</p>
+                </a>
+              ))
+            ) : (
+              <p>Aucun fichier pour ce groupe.</p>
+            )}
+            
+            {/* {selectedGroupId ? (
               messages.length > 0 ? (
                 messages.map((message, index) => (
                   <div key={index} className={`message-box ${message.isMyMessage ? "my-message" : "friend-message"}`}>
@@ -279,7 +319,7 @@ useEffect(() => {
               )
             ) : (
               <p>Sélectionnez un groupe pour voir les discussions.</p>
-            )}
+            )} */}
           </div>
 
           <div className="chatbox-input">
@@ -287,12 +327,20 @@ useEffect(() => {
               size={30}
               style={{ marginLeft: "10px" }}
               color="blue"
+              onClick={() => document.getElementById('fileInput').click()} // Ouvre le sélecteur de fichier
+            />
+             <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
             <input type="text" placeholder="Type a message" />
             <IoIosPaperPlane
               size={30}
               style={{ marginRight: "10px" }}
               color="blue"
+              onClick={handleSendFile}
             />
           </div>
         </div>

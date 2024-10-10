@@ -461,12 +461,12 @@
     overflow-y: auto;
   }
   
-  .message-box {
+  /* .message-box {
     position:relative;
     display: flex;
     width:100%;
     margin: 5px 0;
-  }
+  } */
   
   .message-box p {
     position:relative;

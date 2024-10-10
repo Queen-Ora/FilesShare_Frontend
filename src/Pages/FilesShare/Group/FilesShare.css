@@ -335,15 +335,27 @@
   .message-box {
     position:relative;
     display: flex;
-    width:100%;
+    width: 200px !important;;
     margin: 5px 0;
+    align-items: flex-end;
+    /* box-shadow: 0 0 10px 0 rgba(0,0,0,0.5); */
+    justify-content: center;
   }
+  .message-boxe {
+    position:relative;
+    display: flex;
+    width:100px;
+    margin: 5px 0;
+    align-items: center;
+    justify-content: center;
+  }
+  
   
   .message-box p {
     position:relative;
     right: 0;
     text-align: right;
-    max-width: 65%;
+    max-width: 100%!important;
     padding: 12px;
     background: #dcf8c6;
     border-radius: 10px;
@@ -567,6 +579,7 @@
    /* Dropdown style */
 
 .dropdown-menu {
+  width: 300px;
   position: absolute; /* Assurez-vous qu'il est positionné correctement */
   z-index: 1000; /* Un z-index élevé pour qu'il soit au-dessus des autres éléments */
   background-color: white; /* Assurez-vous que l'arrière-plan est visible */
